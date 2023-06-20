@@ -1,7 +1,7 @@
 import { Input, Text, Button } from './ContactsForm.styled';
 import { Container } from 'components/App.styled';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../Redux/contactsSlice';
+import { addContact } from '../../Redux/operations';
 import shortid from 'shortid';
 
 export default function ContactsForm() {
