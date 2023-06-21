@@ -1,23 +1,42 @@
 import { Input, Text, Button } from './ContactsForm.styled';
 import { Container } from 'components/App.styled';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from '../../Redux/operations';
 import shortid from 'shortid';
+import { selectContacts } from 'Redux/selectors';
 
 export default function ContactsForm() {
   const dispatch = useDispatch();
+   const contacts = useSelector(selectContacts);
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    const contact = {
-      id: shortid(),
-      name: e.currentTarget.name.value,
-      number: e.currentTarget.number.value,
-    };
+const handleSubmit = e => {
+  e.preventDefault();
+  const contactName = e.currentTarget.name.value.trim();
+  const contactNumber = e.currentTarget.number.value.trim();
 
-    dispatch(addContact(contact));
-    e.currentTarget.reset();
+  if (contactName === '' || contactNumber === '') {
+    alert('Please enter a name and number.');
+    return;
+  }
+
+  const isDuplicate = contacts.some(
+    contact => contact.name.toLowerCase() === contactName.toLowerCase()
+  );
+
+  if (isDuplicate) {
+    alert('This contact already exists!');
+    return;
+  }
+
+  const contact = {
+    id: shortid(),
+    name: contactName,
+    number: contactNumber,
   };
+
+  dispatch(addContact(contact));
+  e.currentTarget.reset();
+};
 
   return (
     <form onSubmit={handleSubmit}>
